@@ -1,0 +1,25 @@
+html, body, #root, .App {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header nav ul {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 14px 0;
+  margin: 0;
+}
+
+header nav ul li {
+  padding-left: 14px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
