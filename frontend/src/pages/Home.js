@@ -1,31 +1,56 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import DatePicker from 'react-datepicker';
-import {EXPENSE_TYPE, INCOME_TYPE} from "../utils/consts";
+import {
+    EXPENSE_TYPE,
+    FUTURE_EXPENSE_TYPE,
+    FUTURE_TRANSACTIONS,
+    INCOME_TYPE,
+    TRANSACTIONS_HISTORY
+} from "../utils/consts";
 import "react-datepicker/dist/react-datepicker.css";
+import TransactionsList from "../components/TransactionsList/TransactionsList";
+import {observer} from "mobx-react-lite";
+import {Context} from "../index";
+import {addTransaction, fetchTransactions} from "../http/TransactionsApi";
 
-const Home = () => {
+const Home = observer(() => {
 
-    const transactionList = [
-        {title: 'Test', amount: 200, date: new Date(), type: INCOME_TYPE},
-        {title: 'Test', amount: 200, date: new Date(), type: INCOME_TYPE},
-        {title: 'Test', amount: 200, date: new Date(), type: INCOME_TYPE},
-        {title: 'Test', amount: 200, date: new Date(), type: INCOME_TYPE},
-        {title: 'Test', amount: 200, date: new Date(), type: EXPENSE_TYPE},
-    ]
+    const {transactions} = useContext(Context);
 
     const [inputState, setInputState] = useState({
         title: '',
         amount: '',
         date: new Date(),
-        category: '',
         type: EXPENSE_TYPE
     })
 
-    const { title, amount, date, category, type} = inputState;
+    useEffect(() => {
+        transactions.setLoaded(false)
+        fetchTransactions(transactions.futureTransactionsFlag).then(data => {
+            for (let transaction of data) {
+                transaction.date = new Date(transaction.date)
+            }
+            transactions.setTransactions(data)
+            transactions.setLoaded(true)
+        }).catch(err => console.log(err))
+    }, [transactions.futureTransactionsFlag])
+
+    const { title, amount, date, type} = inputState;
 
     const handleInput = (fieldTitle, text) => {
         setInputState({...inputState, [fieldTitle]: text})
         // setError('')
+    }
+
+    const submitForm = () => {
+        console.log('trying to send...')
+        console.log(inputState)
+        addTransaction(inputState).then(data => {
+            console.log('after submit')
+            console.log(data)
+        }).catch(err => {
+            console.error(err)
+        })
     }
 
     return (
@@ -34,9 +59,9 @@ const Home = () => {
                 <div className={'d-flex mb-3'}>
                     <div className={'col-3 me-3'}>
                         <div className={'input-group mb-3'}>
-                            <select className={'form-select'}>
-                                <option value="">Transactions History</option>
-                                <option value="">Future Transactions</option>
+                            <select className={'form-select'} onChange={e => {transactions.setFutureTransactionsFlag(e.target.value == FUTURE_TRANSACTIONS);}}>
+                                <option value={TRANSACTIONS_HISTORY}>Transactions History</option>
+                                <option value={FUTURE_TRANSACTIONS}>Future Transactions</option>
                             </select>
                         </div>
                     </div>
@@ -79,43 +104,7 @@ const Home = () => {
                                 <p className={'fs-4 fw-bold text-primary'}>123 zł</p>
                             </div>
                         </div>
-                        <div className={'p-3 border rounded mt-3 w-100'}>
-                            <div className={'d-flex justify-content-between'}>
-                                <div className={'col-1'}>
-                                    Date
-                                </div>
-                                <div className={'col-3'}>
-                                    Description
-                                </div>
-                                <div className={'col-2'}>
-                                    Transaction type
-                                </div>
-                                <div className={'col-1'}>
-                                    Amount
-                                </div>
-                            </div>
-                            {
-                                transactionList.map(transaction => {
-                                    return (
-                                    <div className={'my-3'}>
-                                        <div className={'d-flex justify-content-between'}>
-                                            <div className={'col-1 fw-bold'}>
-                                                {transaction.date.getDate() < 10 ? "0" + transaction.date.getDate() : transaction.date.getDate()}.{transaction.date.getMonth()+1 < 10 ? "0" + (transaction.date.getMonth()+1) : transaction.date.getMonth()+1}.{transaction.date.getFullYear()}
-                                            </div>
-                                            <div className={'col-3'}>
-                                                {transaction.title}
-                                            </div>
-                                            <div className={'col-2'}>
-                                                {transaction.type == 1 ? "Income" : "Expense"}
-                                            </div>
-                                            <div className={transaction.type == 1 ? 'col-1 fw-bold text-success text-end' : 'col-1 fw-bold text-end'}>
-                                                {transaction.type == 1 ? transaction.amount : "-" + transaction.amount }
-                                            </div>
-                                        </div>
-                                    </div>)
-                                })
-                            }
-                        </div>
+                        <TransactionsList />
                     </div>
                     <div className={'ms-auto col-4'}>
                         <h5 className={'my-2 fs-4 text-center'}>Add transaction</h5>
@@ -130,9 +119,10 @@ const Home = () => {
                             />
                         </div>
                         <div className={'input-group mb-3'}>
-                            <select className={'form-select'} onChange={(type) => {handleInput('type', type)}}>
+                            <select className={'form-select'} value={type} onChange={(e) => {handleInput('type', e.target.value)}}>
                                 <option value={INCOME_TYPE}>Income</option>
-                                <option selected value={EXPENSE_TYPE}>Expense</option>
+                                <option value={EXPENSE_TYPE}>Expense</option>
+                                <option value={FUTURE_EXPENSE_TYPE}>Future expense</option>
                             </select>
                         </div>
                         <div className={'input-group mb-3'}>
@@ -155,12 +145,17 @@ const Home = () => {
                                onChange={e => handleInput('amount', e.target.value)}
                             />
                         </div>
+                        <div className={'text-end'}>
+                            <button className={'btn btn-outline-success'} onClick={submitForm}>
+                                Submit
+                            </button>
+                        </div>
 
                     </div>
                 </div>
             </div>
         </div>
     );
-};
+});
 
 export default Home;
