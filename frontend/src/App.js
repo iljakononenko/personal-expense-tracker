@@ -8,6 +8,7 @@ const App = observer(() => {
     <BrowserRouter>
         <div className="App h-100">
             <Header />
+            <Home />
             <Routes>
                 <Route path="/" element={<Home />}></Route>
             </Routes>
