@@ -14,6 +14,8 @@ const TransactionSchema = new mongoose.Schema({
         maxLength: 20,
         trim: true
     },
+    // type: 1 - income
+    // type: 2 - expense
     type: {
         type: Number,
         default: 2

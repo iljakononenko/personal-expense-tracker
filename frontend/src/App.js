@@ -9,9 +9,6 @@ const App = observer(() => {
         <div className="App h-100">
             <Header />
             <Home />
-            <Routes>
-                <Route path="/" element={<Home />}></Route>
-            </Routes>
         </div>
     </BrowserRouter>
   );
