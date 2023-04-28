@@ -31,18 +31,18 @@ const TransactionsList = observer(() => {
     }
 
     return (
-        <div className={'p-3 border rounded mt-3 w-100'}>
+        <div className={'p-2 p-md-3 border rounded mt-3 w-100'}>
             <div className={'d-flex'}>
-                <div className={'col-2 ps-3'}>
+                <div className={'col-4 col-md-2 ps-3'}>
                     {transactions.futureTransactionsFlag ? 'Payed' : 'Date'}
                 </div>
-                <div className={'col ms-2'}>
+                <div className={'d-none d-md-block col ms-2'}>
                     Description
                 </div>
-                <div className={transactions.futureTransactionsFlag ? 'd-none' : 'col-2 me-2'}>
+                <div className={transactions.futureTransactionsFlag ? 'd-none' : 'col-4 col-md-2 me-2'}>
                     Transaction type
                 </div>
-                <div className={'col-2 text-center'}>
+                <div className={'col-3 col-md-2 text-center'}>
                     Amount
                 </div>
                 <div className={'ms-auto'} style={{width: 30}}>

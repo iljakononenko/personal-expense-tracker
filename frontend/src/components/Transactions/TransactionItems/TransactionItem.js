@@ -21,9 +21,9 @@ const TransactionItem = ({transaction, editTransaction, removeTransaction}) => {
     }
 
     return (
-        <div className={'p-3 border rounded my-3'}>
-            <div className={'d-flex justify-content-between'}>
-                <div className={'col-2 fw-bold'}>
+        <div className={'p-2 p-md-3 border rounded my-3'}>
+            <div className={'d-flex flex-wrap justify-content-between'}>
+                <div className={'col-4 col-md-2 fw-bold'}>
                     {
                         isOpened
                         ?
@@ -41,7 +41,7 @@ const TransactionItem = ({transaction, editTransaction, removeTransaction}) => {
                             displayDate(transaction.date)
                     }
                 </div>
-                <div className={'col'}>
+                <div className={'col-12 col-md order-4 order-md-0 mt-3 mt-md-0'}>
                     {
                         isOpened
                             ?
@@ -59,7 +59,7 @@ const TransactionItem = ({transaction, editTransaction, removeTransaction}) => {
                             transaction.title
                     }
                 </div>
-                <div className={transaction.type == 1 ? 'text-success col-2 fw-bold' : 'col-2 fw-bold'}>
+                <div className={transaction.type == 1 ? 'text-success col-4 col-md-2 fw-bold' : 'col-4 col-md-2 fw-bold'}>
                     {
                         isOpened
                         ?
@@ -77,7 +77,7 @@ const TransactionItem = ({transaction, editTransaction, removeTransaction}) => {
                             transaction.type == 1 ? "Income" : "Expense"
                     }
                 </div>
-                <div className={transaction.type == 1 ? 'col-2 fw-bold text-success text-center' : 'col-2 fw-bold text-center'}>
+                <div className={transaction.type == 1 ? 'col-4 col-md-2 fw-bold text-success text-center' : 'col-4 col-md-2 fw-bold text-center'}>
                     {
                         isOpened
                         ?
@@ -95,7 +95,7 @@ const TransactionItem = ({transaction, editTransaction, removeTransaction}) => {
                             transaction.type == 2 ? "-" + transaction.amount + " zł" : transaction.amount + " zł"
                     }
                 </div>
-                <div className={"d-flex ms-auto ps-2 align-items-center justify-content-end fs-5 cursor-pointer"} onClick={switchOpened}>
+                <div className={"d-flex ms-auto ps-2 align-items-center justify-content-end fs-5 cursor-pointer order-5"} onClick={switchOpened}>
                     {
                         isOpened
                         ?
