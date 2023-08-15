@@ -6,6 +6,7 @@ import {fetchUser} from "../http/UserApi";
 import TransactionsView from "../components/Transactions/TransactionsView";
 import {fetchTransactions} from "../http/TransactionsApi";
 import UserView from "../components/User/UserView";
+import TodoView from "../components/Todo/TodoView";
 
 const Home = observer(() => {
 
@@ -43,14 +44,19 @@ const Home = observer(() => {
         <div>
             <div className={"container my-3 d-flex justify-content-center"}>
                 <button onClick={() => setView(1)} className={"btn btn-outline-secondary me-3"}>Transactions</button>
-                <button onClick={() => setView(2)} className={"btn btn-outline-secondary"}>User settings</button>
+                <button onClick={() => setView(2)} className={"btn btn-outline-secondary me-3"}>User settings</button>
+                <button onClick={() => setView(3)} className={"btn btn-outline-secondary"}>Shopping list</button>
             </div>
             {
                 view === 1
                 ?
                 <TransactionsView />
                 :
-                <UserView />
+                    view === 2
+                    ?
+                        <UserView />
+                        :
+                        <TodoView/>
             }
         </div>
     );
